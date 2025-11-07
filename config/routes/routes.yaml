@@ -1,0 +1,5 @@
+# config/routes/routes.yaml
+blog_list:
+  path: /blog
+  # the controller value has the format 'controller_class::method_name'
+  controller: App\Controller\BlogController::list
