@@ -30,5 +30,6 @@ class CarFixtures extends Fixture
         }
         
         $manager->flush();
+        
     }
 }

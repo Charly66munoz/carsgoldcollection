@@ -6,32 +6,96 @@
 <style>
     body{
         background-color: #cabeaeff;
-        direction: flex;
-        justify-content:center;
-        align-items: center;
-        text-align: center;
-        font: 18px/1.5 sans-serif
-    }
-    .example-wrapper {display:flex; flex-direction: column; align-items: center; text-align:center; justify-content:center; margin: 1em auto; max-width: 800px; width: 95%; width: 60%}
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    .lista{
-        display:flex;
+        display: flex;
         flex-direction: column;
-        text-align:left;
-        width: 40%;
+        font: 18px/1.5 sans-serif;
+        height: 100vh;
+        margin: 0;
+    }
+    header{
+        text-align:center;
+        background-color: rgba(245, 245, 245, 0.06);
+        box-shadow: 0px 1px 10px black;
+        color: white;
+
+    }
+    h1 {
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+    .layout {
+        display: flex;
+        flex: 1;
+        height: 100%;
+    }
+    aside {
         background-color: #f5f5f54d;
+        width: 250px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 20px;
+        border-right: 2px solid rgba(0,0,0,0.1);
+    }
+
+    .lista ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    .lista li {
+        margin: 10px 0;
     }
     a {
     text-decoration: none;
     }
     ul {list-style-type: none;}
+    main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    main img {
+        max-width: 400px;
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
 </style>
+<header>
     <h1> Luxury Collector</h1>
-<div class="example-wrapper">
+</header>
+<div class="layout">
+    <aside>
     <div class="lista">
-    <!--{{ app.request.locale }}-->
-        <img src="{{car.photo}}">
+        <ul>
+            {% for car in cars %}
+                <li>
+                    <a href="{{ path('car_detail',{ id: car.id()  }) }}">
+                        {{ ('brand.' ~ car.brand.value|lower)|trans({}, 'enum') }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
+    </aside>
     
+    
+    <main>
+        <img src="/carses/{{car.photo}}">
+        <form action="{{path('delete',{id: car.id()})}}">
+            <button type= "submit">Eliminar coche</button>
+        </form>
+        
+    </main>
 </div>
 {% endblock %}
+

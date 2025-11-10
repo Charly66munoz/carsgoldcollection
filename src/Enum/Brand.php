@@ -9,7 +9,7 @@ enum Brand: string
     case PORSCHE = 'porsche';
     case ASTON_MARTIN = 'aston_martin';
     case BENTLEY = 'bentley';
-    case ROLLS_ROYCE = 'rolls_royce';
+    case ROLLS_ROYCE = 'rolls_roys';
     case MASERATI = 'maserati';
     case BUGATTI = 'bugatti';
     case MCLAREN = 'mcLaren';

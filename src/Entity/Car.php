@@ -8,7 +8,7 @@ use App\Repository\CarRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Constraints\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 
 
@@ -36,8 +36,9 @@ class Car
 
     
     #[Assert\NotBlank]
-    #[ORM\Column(type:'decimal', scale: 2,)]
-    private ?float $price = null;
+    #[ORM\Column(type:'decimal', precision:10, scale: 2,)]
+    #[Assert\Regex(pattern: '/^\d+(\.\d{1,2})?$/', message: 'El precio debe ser un número con hasta 2 decimales.')]
+    private ?string $price = null;
 
     #[Assert\NotBlank]
     #[ORM\Column(type: 'integer')]
@@ -98,12 +99,12 @@ class Car
 
     public function getPrice(): ?float
     {
-        return $this->price;
+        return (float) $this->price;
     }
 
-    public function setPrice(float $price): static
+    public function setPrice(float|string $price): static
     {
-        $this->price = $price;
+        $this->price = number_format((float)$price,2,".","");
 
         return $this;
     }
