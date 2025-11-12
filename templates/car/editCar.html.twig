@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Car{% endblock %}
+
+{% block body %}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% endblock %}
+
+
+<header>
+    <h1> Luxury Collector</h1>
+</header>
+<div class="layout">
+    <aside>
+    <div class="lista">
+        <ul>
+                       
+            <li><a href="{{ path('cars') }}">Lista de autos</a></li>
+            <li><a href="{{ path('add_car') }}">Crear auto</a></li> 
+        </ul>
+    </div>
+    </aside>
+    <main>
+    <h1>Indique que cambios desea realizar</h1>
+
+    {{ include('car2/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('car_detail',{ id: car.id()  }) }}">back to list</a>
+    </main>
+</div>
+
+    
+{% endblock %}

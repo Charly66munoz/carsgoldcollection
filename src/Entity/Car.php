@@ -10,14 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Uid\Uuid;
 
-
-
 #[ORM\Entity(repositoryClass: CarRepository::class)]
 class Car 
 {
     use UUIDTrait;
+    private $today;
 
-    #[Assert\Choice(callback: [Brand::class, 'value'])]
+   
+    #[Assert\Choice(callback: [Brand::class, 'cases'])]
     #[Assert\NotBlank]
     #[ORM\Column(enumType: Brand::class )]
     private ?Brand $brand = null;
@@ -41,8 +41,18 @@ class Car
     private ?string $price = null;
 
     #[Assert\NotBlank]
+    #[Assert\Range(min: 1900,
+        max: 2025,
+        notInRangeMessage: 'El año debe estar entre {{ min }} y {{ max }}.',
+    )]
     #[ORM\Column(type: 'integer')]
     private ?int $year = null;
+
+    public function __construct()
+    {
+        $this->today = (int)date('Y');
+    }
+
 
     public function getId(): ?Uuid
     {
@@ -52,9 +62,9 @@ class Car
     public function getBrand(): ?Brand
     {
         return $this->brand;
-    }
+    } 
 
-    public function setBrand(Brand $brand): static
+    public function setBrand(?Brand $brand): static
     {
         $this->brand = $brand;
 

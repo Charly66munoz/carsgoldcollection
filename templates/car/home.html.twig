@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Hello CarController!{% endblock %}
+{% block body %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% endblock %}
+
+
+<header>
+    <h1> Luxury Collector</h1>
+</header>
+<div class="layout">
+    <aside>
+    <div class="lista">
+        <ul>
+            
+                <li><a href="{{ path('cars') }}">Lista de autos</a></li>
+                <li><a href="{{ path('add_car') }}">Crear auto</a></li>
+            
+        </ul>
+    </div>
+    </aside>
+    
+{% endblock %}

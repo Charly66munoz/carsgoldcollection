@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Hello CarController!{% endblock %}
+{% block body %}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% endblock %}
+
+
+<header>
+    <h1> Luxury Collector</h1>
+</header>
+<div class="layout">
+    <aside>
+    <div class="lista">
+        <ul>
+            {% for car in cars %}
+                <li>
+                    <a href="{{ path('car_detail',{ id: car.id() }) }}">
+                        {{ ('brand.' ~ car.brand.value|lower)|trans({}, 'enum') }}
+                    </a>
+                </li>
+            {% endfor %}
+            <hr>
+            
+            
+            <li><a href="{{ path('add_car') }}">Crear auto</a></li> 
+        </ul>
+    </div>
+    </aside>
+</div>
+    
+{% endblock %}

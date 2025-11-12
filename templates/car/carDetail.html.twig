@@ -3,70 +3,39 @@
 {% block title %}Hello CarController!{% endblock %}
 
 {% block body %}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% endblock %}
 <style>
-    body{
-        background-color: #cabeaeff;
-        display: flex;
-        flex-direction: column;
-        font: 18px/1.5 sans-serif;
-        height: 100vh;
-        margin: 0;
-    }
-    header{
-        text-align:center;
-        background-color: rgba(245, 245, 245, 0.06);
-        box-shadow: 0px 1px 10px black;
-        color: white;
-
-    }
-    h1 {
-        margin-top: 20px;
-        margin-bottom: 30px;
-    }
-    .layout {
-        display: flex;
-        flex: 1;
-        height: 100%;
-    }
-    aside {
-        background-color: #f5f5f54d;
-        width: 250px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding-top: 20px;
-        border-right: 2px solid rgba(0,0,0,0.1);
-    }
-
-    .lista ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        text-align: center;
-    }
-
-    .lista li {
-        margin: 10px 0;
-    }
-    a {
-    text-decoration: none;
-    }
-    ul {list-style-type: none;}
-    main {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+   
+    
     main img {
         max-width: 400px;
         width: 100%;
         height: auto;
+        margin-bottom: 5px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .infoDiv{
+        width: 100%;
+        margin: 2px;
+        padding: 0px;
+        display:flex;
+        flex-direction: row;
+        align-content:flex-start;
+        align-items:flex-start;
+        font-size: 15px
+    }    
+    .infoDiv p{
+            margin: 5px;
+            padding: 0px;
+            font-size: 15px
+        }
+    hr{
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
     }
 
 </style>
@@ -76,6 +45,7 @@
 <div class="layout">
     <aside>
     <div class="lista">
+        <h3>Lista de coches:</h3>
         <ul>
             {% for car in cars %}
                 <li>
@@ -84,16 +54,46 @@
                     </a>
                 </li>
             {% endfor %}
+                <li>
+                    
+                </li>
         </ul>
     </div>
     </aside>
     
     
     <main>
+        <h1>{{car.model }} </h1>
         <img src="/carses/{{car.photo}}">
-        <form action="{{path('delete',{id: car.id()})}}">
-            <button type= "submit">Eliminar coche</button>
-        </form>
+        <div class="infoDiv inf1">
+            <p><strong>Marca:</strong></p>
+            <p>{{ ('brand.' ~ car.brand.value|lower)|trans({}, 'enum') }}</p>
+            <br>
+        </div>
+            <hr>   
+        <div class="infoDiv inf1">
+            <p><strong>Precio :</strong></p>
+            <p>{{ car.price }} €</p>
+        </div>
+            <hr>   
+        <div class="infoDiv inf1">
+            <p><strong>Año:</strong></p>
+            <p>{{ car.year}}</p>
+        </div>
+            <hr>   
+        <div class="infoDiv inf1">
+            <p><strong>Descripcion:</strong></p>
+            <p>{{ car.description}}</p>
+        </div>
+            <hr>   
+        <div  id="buttons">
+            {{include('car/formDelate.html.twig') }} 
+            <a href="{{ path('edit_car',{ id: car.id()  }) }}">EDITAR COCHE</a>
+        </div>
+       
+        
+        
+        
         
     </main>
 </div>

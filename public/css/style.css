@@ -1,0 +1,111 @@
+body {
+    background-color: #cabeaeff;
+    display: flex;
+    flex-direction: column;
+    font: 18px/1.5 sans-serif;
+    height: 100vh;
+    margin: 0;
+}
+
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    padding-top: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+header {
+    text-align: center;
+    background-color: rgba(245, 245, 245, 0.06);
+    box-shadow: 0px 1px 10px black;
+    color: white;
+
+
+}
+
+h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.layout {
+    display: flex;
+    flex: 1;
+    height: 100%;
+}
+
+aside {
+    background-color: #00718070;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    border-right: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.lista ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.lista li {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(255, 254, 254);
+}
+
+ul {
+    list-style-type: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+
+}
+
+form div {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    padding: 5px;
+}
+
+select {
+    padding: 5px;
+
+}
+
+button {
+    margin: 10px;
+    padding: 10px;
+    border: none;
+    background: #56888fff;
+    color: white;
+
+}
+
+button:hover {
+    background: #2f4444ff;
+}
+
+#buttons{
+    display: flex;
+    flex: column;
+}
