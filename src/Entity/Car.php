@@ -7,6 +7,7 @@ use App\Enum\Brand;
 use App\Repository\CarRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Uid\Uuid;
 
@@ -30,7 +31,7 @@ class Car
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[Assert\NotBlank]
+    
     #[ORM\Column(length: 255)]
     private ?string $photo = null;
 
@@ -41,12 +42,19 @@ class Car
     private ?string $price = null;
 
     #[Assert\NotBlank]
-    #[Assert\Range(min: 1900,
+    #[Assert\Range(min: 1930,
         max: 2025,
         notInRangeMessage: 'El año debe estar entre {{ min }} y {{ max }}.',
     )]
     #[ORM\Column(type: 'integer')]
     private ?int $year = null;
+
+    #[Assert\File(
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/png'],
+        extensionsMessage: 'Porfavor ingrese una imagen jpg ',
+    )]
+    private ?File $photoFile = null;
 
     public function __construct()
     {
@@ -103,6 +111,17 @@ class Car
     public function setPhoto(string $photo): static
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+    public function getPhotoFile(): ?File
+    {
+        return $this->photoFile;
+    }
+
+    public function setPhotoFile(File $photoFile): static
+    {
+        $this->photoFile = $photoFile;
 
         return $this;
     }

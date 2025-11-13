@@ -1,5 +1,6 @@
 brand: Marca
 description: Descripcion
+photoFile: 'Foto de auto'
 photo: Foto
 model: Modelo
 price: Precio

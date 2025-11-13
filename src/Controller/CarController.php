@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Car;
-use App\Form\CarType;
 use App\Form\Entity\CarForm;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -52,11 +52,26 @@ final class CarController extends AbstractController
     public function carAdd(CarRepository $carRepository, Request $request, EntityManagerInterface $em): Response
     {
         $car = new Car();
-        $form = $this->createForm(CarForm::class, $car);
+        $form = $this->createForm(CarForm::class, $car, ['validation_groups' => ['create'],]);
         $cars = $carRepository->findAll(); // buscara todo los coches
+        $form->handleRequest($request);
 
-         $form->handleRequest($request);
+        $photoFile = $form->get('photoFile')->getData();
+        if ($photoFile) {
+        $newFileName = uniqid().'.'.$photoFile->guessExtension();
+        
+    }
+        
+
+
         if ($form->isSubmitted() && $form->isValid()) {
+            try {
+            $photoFile->move($this->getParameter('photo_directory'), $newFileName);
+            $car->setPhoto($newFileName);
+            } catch (FileException $e) {
+            $this->addFlash('error', 'No se pudo subir la imagen. Intenta de nuevo.');
+            }
+
             $em ->persist($car);
             $em->flush();
 
@@ -72,10 +87,25 @@ final class CarController extends AbstractController
     #[Route('cars/{id}/update', name: 'edit_car')]
     public function carEdit(Request $request, EntityManagerInterface $em, Car $car): Response
     {
-        $form = $this->createForm(CarType::class, $car);
+        $oldPhoto= $car->getPhoto();
+        $form = $this->createForm(CarForm::class, $car);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $photoFile = $form->get('photoFile')->getData();
+            if ($photoFile) {
+                $newFileName = uniqid().'.'.$photoFile->guessExtension();
+                try {
+                $photoFile->move($this->getParameter('photo_directory'), $newFileName);
+                
+                unlink($this->getParameter('photo_directory').'/'.$oldPhoto);                
+                $car->setPhoto($newFileName);
+                } catch (FileException $e) {
+                $this->addFlash('error', 'No se pudo subir la imagen. Intenta de nuevo.');
+                }
+            }else{
+                $car->setPhoto($oldPhoto);
+            }
             $em->flush();
 
             return $this->redirectToRoute('car_detail',['id'=> $car->getId()], Response::HTTP_SEE_OTHER);

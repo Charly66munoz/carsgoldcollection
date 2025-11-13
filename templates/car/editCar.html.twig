@@ -16,6 +16,7 @@
     <div class="lista">
         <ul>
                        
+            <li><a href="{{ path('home')}}">Incio/Home</a></li>
             <li><a href="{{ path('cars') }}">Lista de autos</a></li>
             <li><a href="{{ path('add_car') }}">Crear auto</a></li> 
         </ul>
@@ -24,9 +25,9 @@
     <main>
     <h1>Indique que cambios desea realizar</h1>
 
-    {{ include('car2/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('car/formCar.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('car_detail',{ id: car.id()  }) }}">back to list</a>
+   
     </main>
 </div>
 

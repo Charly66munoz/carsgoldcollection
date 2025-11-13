@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
  final class CarForm extends AbstractType
@@ -35,13 +37,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
                     'attr' => ['placeholder' => 'Escribe una descripción breve del coche'],
                     'translation_domain' => 'message',
                 ])
-                ->add('photo', TextType::class,[
-                    'label' => 'photo',
-                    'translation_domain' => 'message',
-                    'attr' => ['placeholder' => 'Subir imagen'],
-                    
-
-                ])
+                
                 ->add('price', NumberType::class,[
                     'label' => 'price',
                     'translation_domain' => 'message',
@@ -54,11 +50,27 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
                     'label' => 'year',
                     'translation_domain' => 'message',
                     'attr' => [
-                        'min' => 1900, 
+                        'min' => 1930, 
                         'max' => (new \DateTime())->format('Y'),
                         
                     ],
                     'html5' => true,
+                ])
+                ->add('photoFile', FileType::class,[
+                    'label' => 'Foto del coche (JPEG/PNG)',
+                    'mapped' => false,
+                    'required' => true,
+                    'translation_domain' => 'message',
+                    'constraints' => [
+                            new FilE([
+                            'maxSize' => '5M',
+                            'mimeTypes' => [
+                                'image/jpeg',
+                                'image/png',
+                                ],
+                                'mimeTypesMessage' => 'Por favor sube una imagen válida (JPG, PNG).',
+                                ])
+                    ],
                 ]);
     }
 

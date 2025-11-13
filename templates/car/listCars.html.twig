@@ -18,13 +18,14 @@
             {% for car in cars %}
                 <li>
                     <a href="{{ path('car_detail',{ id: car.id() }) }}">
-                        {{ ('brand.' ~ car.brand.value|lower)|trans({}, 'enum') }}
+                        {{ ('brand.' ~ car.brand.value)|trans({}, 'enum') }}
                     </a>
                 </li>
             {% endfor %}
             <hr>
             
             
+            <li><a href="{{ path('home') }}">Inicio</a></li> 
             <li><a href="{{ path('add_car') }}">Crear auto</a></li> 
         </ul>
     </div>

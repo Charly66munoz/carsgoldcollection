@@ -1,7 +1,8 @@
 {# templates/task/new.html.twig #}
-        {{ form_start(form) }}
+        {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
         {{ form_widget(form) }}
         <br>
         <button class="btn">{{ button_label|default('Guardar') }}</button>
+        
         {{ form_end(form) }}
 
