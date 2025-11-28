@@ -17,7 +17,6 @@ class Car
     use UUIDTrait;
     private $today;
 
-   
     #[Assert\Choice(callback: [Brand::class, 'cases'])]
     #[Assert\NotBlank]
     #[ORM\Column(enumType: Brand::class )]
@@ -31,11 +30,9 @@ class Car
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    
     #[ORM\Column(length: 255)]
     private ?string $photo = null;
 
-    
     #[Assert\NotBlank]
     #[ORM\Column(type:'decimal', precision:10, scale: 2,)]
     #[Assert\Regex(pattern: '/^\d+(\.\d{1,2})?$/', message: 'El precio debe ser un número con hasta 2 decimales.')]
@@ -60,7 +57,6 @@ class Car
     {
         $this->today = (int)date('Y');
     }
-
 
     public function getId(): ?Uuid
     {

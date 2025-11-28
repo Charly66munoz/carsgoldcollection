@@ -19,11 +19,19 @@
             <li><a href="{{ path('home')}}">Incio/Home</a></li>
             <li><a href="{{ path('cars') }}">Lista de autos</a></li>
             <li><a href="{{ path('add_car') }}">Crear auto</a></li> 
+            
         </ul>
     </div>
     </aside>
     <main>
     <h1>Indique que cambios desea realizar</h1>
+    {% if car.photo %}
+         <div class="mb-3"> 
+            <img src="{{ asset('img/carses/' ~ car.photo) }}" alt="Foto del coche" width="200" class="rounded shadow">
+        </div>
+
+    {% endif %}
+
 
     {{ include('car/formCar.html.twig', {'button_label': 'Update'}) }}
 

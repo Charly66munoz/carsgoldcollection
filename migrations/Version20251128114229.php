@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20251113104011 extends AbstractMigration
+final class Version20251128114229 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,7 +20,7 @@ final class Version20251113104011 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE car (id UUID NOT NULL, brand VARCHAR(255) NOT NULL, model VARCHAR(60) NOT NULL, description TEXT NOT NULL, photo VARCHAR(255) , price NUMERIC(10, 2) NOT NULL, year INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE car (id UUID NOT NULL, brand VARCHAR(255) NOT NULL, model VARCHAR(60) NOT NULL, description TEXT NOT NULL, photo VARCHAR(255) NOT NULL, price NUMERIC(10, 2) NOT NULL, year INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN car.id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');

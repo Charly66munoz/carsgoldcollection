@@ -7,6 +7,8 @@ use App\Form\Entity\CarForm;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,11 +62,10 @@ final class CarController extends AbstractController
         if ($photoFile) {
         $newFileName = uniqid().'.'.$photoFile->guessExtension();
         
-    }
-        
-
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             try {
             $photoFile->move($this->getParameter('photo_directory'), $newFileName);
             $car->setPhoto($newFileName);
@@ -90,15 +91,17 @@ final class CarController extends AbstractController
         $oldPhoto= $car->getPhoto();
         $form = $this->createForm(CarForm::class, $car);
         $form->handleRequest($request);
+        $fileSystem = new Filesystem;
 
         if ($form->isSubmitted() && $form->isValid()) {
             $photoFile = $form->get('photoFile')->getData();
+
             if ($photoFile) {
                 $newFileName = uniqid().'.'.$photoFile->guessExtension();
                 try {
                 $photoFile->move($this->getParameter('photo_directory'), $newFileName);
                 
-                unlink($this->getParameter('photo_directory').'/'.$oldPhoto);                
+                $fileSystem->remove($this->getParameter('photo_directory').'/'.$oldPhoto);
                 $car->setPhoto($newFileName);
                 } catch (FileException $e) {
                 $this->addFlash('error', 'No se pudo subir la imagen. Intenta de nuevo.');
@@ -123,7 +126,9 @@ final class CarController extends AbstractController
     #[Route('/{id}', name: 'delete_car', methods: ['POST'],)]
     public function carDelete(Request $request, Car $car, EntityManagerInterface $em): Response
     {
+         $fileSystem = new Filesystem;
         if($this->isCsrfTokenValid('delete'.$car->getId(), $request->getPayload()->getString('_token'))){
+            $fileSystem->remove($this->getParameter('photo_directory').'/'.$car->getPhoto());
             $em->remove($car);
             $em->flush();
         }

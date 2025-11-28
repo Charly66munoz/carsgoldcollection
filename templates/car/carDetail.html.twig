@@ -39,13 +39,12 @@
     }
 
 </style>
-<header>
-    <h1> Luxury Collector</h1>
-</header>
+
 <div class="layout">
     <aside>
     <div class="lista">
-        <h3>Lista de coches:</h3>
+        <h3> Luxury Collector</h3>
+        <h4>Lista de coches:</h4>
         <ul>
             {% for car in cars %}
                 <li>
@@ -68,7 +67,7 @@
         <img src="{{ asset('img/carses/' ~ car.photo) }}">
         <div class="infoDiv inf1">
             <p><strong>Marca:</strong></p>
-            <p>{{ ('brand.' ~ car.brand.value|lower)|trans({}, 'enum') }}</p>
+            <p>{{ ('brand.' ~ car.brand.value)|trans({}, 'enum') }}</p>
             <br>
         </div>
             <hr>   

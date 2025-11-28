@@ -11,12 +11,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
  final class CarForm extends AbstractType
  {
     
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options) 
     {
         $builder
                 ->add('brand',ChoiceType::class, [
@@ -59,9 +60,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
                 ->add('photoFile', FileType::class,[
                     'label' => 'Foto del coche (JPEG/PNG)',
                     'mapped' => false,
-                    'required' => true,
+                    'required' => false,
                     'translation_domain' => 'message',
                     'constraints' => [
+                            new NotBlank([
+                            'message' => 'Debes subir una imagen.',
+                            'groups' => ['create'], // solo al crear
+        ]),
                             new FilE([
                             'maxSize' => '5M',
                             'mimeTypes' => [
