@@ -66,7 +66,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
                             new NotBlank([
                             'message' => 'Debes subir una imagen.',
                             'groups' => ['create'], // solo al crear
-        ]),
+                ]),
                             new FilE([
                             'maxSize' => '5M',
                             'mimeTypes' => [

@@ -2,6 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="/logo/descarga.jpg">
         {% block stylesheets %}
@@ -11,7 +12,7 @@
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body data-turbo="false">
         {% block body %}{% endblock %}
     </body>
 </html>

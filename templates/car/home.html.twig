@@ -1,26 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/layout_sidebar.html.twig' %}
 
+{% block title %}Home{% endblock %}
 
-{% block title %}Hello CarController!{% endblock %}
-{% block body %}
-
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    {% endblock %}
-
-
-<div class="layout">
-    <aside>
-
-    <div class="lista">
-    <h3> Luxury Collector</h3>
-        <ul>
-            
-                <li><a href="{{ path('cars') }}">Lista de autos</a></li>
-                <li><a href="{{ path('add_car') }}">Crear auto</a></li>
-            
-        </ul>
-    </div>
-    </aside>
-    
+{% block main %}
+    <h1>Bienvenido</h1>
 {% endblock %}

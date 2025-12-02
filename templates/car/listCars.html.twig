@@ -1,33 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends 'layouts/layout_sidebar.html.twig' %}
 
+{% block title %}Lista de Autos{% endblock %}
 
-{% block title %}Hello CarController!{% endblock %}
-{% block body %}
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    {% endblock %}
+{% block main %}
+    <ul>
+        {% for car in cars %}
+            <li>
+                <a style="color:black" href="{{ path('car_detail',{ id: car.id() }) }}">
+                    {{ ('brand.' ~ car.brand.value)|trans({}, 'enum') }}
+                </a>
 
-
-<div class="layout">
-    <aside>
-    <div class="lista">
-    <h3> Luxury Collector</h3>
-        <ul>
-            {% for car in cars %}
-                <li>
-                    <a href="{{ path('car_detail',{ id: car.id() }) }}">
-                        {{ ('brand.' ~ car.brand.value)|trans({}, 'enum') }}
-                    </a>
-                </li>
-            {% endfor %}
-            <hr>
-            
-            
-            <li><a href="{{ path('home') }}">Inicio</a></li> 
-            <li><a href="{{ path('add_car') }}">Crear auto</a></li> 
-        </ul>
-    </div>
-    </aside>
-</div>
-    
+                <img src="{{ asset('img/carses/' ~ car.photo) }}" width="50" class="rounded shadow">
+                <hr>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

@@ -1,4 +1,4 @@
-<form method="post" action="{{ path('delete_car', {'id': car.id})}}" onsubmit="return confirm('Esta seguro de que desea eliminar {{('brand.' ~ car.brand.value|lower)|trans({}, 'enum')}}?');">
+<form method="post" action="{{ path('delete_car', {'id': car.id})}}" onsubmit="return confirm('Esta seguro de que desea eliminar {{('brand.' ~ car.brand.value)|trans({}, 'enum')}}?');">
     <input type="hidden" name="_token" value="{{csrf_token('delete' ~ car.id) }}">
     <button class="btn">Borrar</button>
     

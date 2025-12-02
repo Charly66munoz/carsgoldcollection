@@ -1,4 +1,6 @@
 <?php
+namespace App\DataFixtures\Default\Core;
+
 
 namespace App\DataFixtures\Default\Core;
 
@@ -24,14 +26,14 @@ class UserFixture extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $user = new User();
+        $user->setNombre("Boo");
         $user->setEmail('aa@luxury.com');
         $passw = $this->passWordHaser->hashPassword($user, '123456');
         $user->setPassword($passw);
-        $user->setRoles(["ROLE_USER"]);
+        $user->setRoles(['ROLE_USER']);
 
         $manager->persist($user);
         $manager->flush();
 
     }
-
 }

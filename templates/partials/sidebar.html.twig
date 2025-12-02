@@ -1,0 +1,17 @@
+<div class="lista">
+    <h3>Luxury Collector</h3>
+    <ul>
+        <li><a href="{{ path('home') }}">Inicio</a></li>
+        <hr>
+        <li><a href="{{ path('cars') }}">Lista de autos</a></li>
+
+        {% if app.user %}
+            <li><a href="{{ path('add_car') }}">Añadir auto</a></li>
+            <hr>
+            <li><a href="{{ path('app_logout') }}">Logout</a></li>
+        {% else %}
+            <hr>
+            <li><a href="{{ path('app_login') }}">Login</a></li>
+        {% endif %}
+    </ul>
+</div>

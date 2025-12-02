@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Car;
+use App\Entity\User;
 use App\Form\Entity\CarForm;
 use App\Repository\CarRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,28 +24,38 @@ final class CarController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(): Response
     {
+        $user = $this->getUser();
+        $roles = $user ? $user->getRoles() : [];
         
-        return $this->render('car/home.html.twig', []);
+        return $this->render('car/home.html.twig', [
+            'role' => $roles,
+
+        ]);
     }
 
     #[Route('/cars', name: 'cars')]
     public function indexs(CarRepository $carRepository): Response
     {
         $cars = $carRepository->findAll(); // buscara todo los coches
-
-
+        $user = $this->getUser();
+        $roles = $user ? $user->getRoles() : [];
         return $this->render('car/listCars.html.twig', [
             'cars' => $cars,
+            'role' => $roles,
+            
         ]);
     }
-
+    
     #[Route('/cars/car/{id}', name: 'car_detail')]
     public function carDetail(Uuid $id, CarRepository $carRepository): Response
     {
         $car = $carRepository->find($id); // buscara todo los coches
         $cars = $carRepository->findAll(); // buscara todo los coches
-
+        
+        $user = $this->getUser();
+        $roles = $user ? $user->getRoles() : [];
         return $this->render('car/carDetail.html.twig', [
+            'role' => $roles,
             'car' => $car,
             'cars' => $cars,
         ]);
@@ -123,7 +134,7 @@ final class CarController extends AbstractController
     /**
      * @Method("DELETE")
     */
-    #[Route('/{id}', name: 'delete_car', methods: ['POST'],)]
+    #[Route('/cars/{id}/delete', name: 'delete_car', methods: ['POST'],)]
     public function carDelete(Request $request, Car $car, EntityManagerInterface $em): Response
     {
          $fileSystem = new Filesystem;
