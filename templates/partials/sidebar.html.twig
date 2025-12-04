@@ -1,10 +1,23 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+{% endblock %}
+
 <div class="lista">
+    <form method="get" action="{{ path('cars') }}" class="menu-search">
+        <div class="shearcher">
+            <input type="text" id="search-input" placeholder="Buscar...">
+            <div id="search-results"></div>
+            <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>
+            </button>
+        </div>
+    </form>
     <h3>Luxury Collector</h3>
     <ul>
         <li><a href="{{ path('home') }}">Inicio</a></li>
         <hr>
         <li><a href="{{ path('cars') }}">Lista de autos</a></li>
-
         {% if app.user %}
             <li><a href="{{ path('add_car') }}">Añadir auto</a></li>
             <hr>
@@ -15,3 +28,35 @@
         {% endif %}
     </ul>
 </div>
+<script>
+    const input = document.getElementById('search-input');
+const resultsContainer = document.getElementById('search-results');
+
+input.addEventListener('input', () => {
+    const query = input.value;
+    if (query.length < 1) {
+        resultsContainer.innerHTML = '';
+        return;
+    }
+
+    fetch(`/search/ajax?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            resultsContainer.innerHTML = '';
+            data.forEach(car => {
+                const div = document.createElement('div');
+                div.textContent = `${car.brand} ${car.model} (${car.year})`;
+
+                // Aquí ponemos el click dentro del forEach
+                div.addEventListener('click', () => {
+                    window.location.href = `/cars/car/${car.id}`;
+                    input.value = '';
+                    resultsContainer.innerHTML = '';
+                });
+
+                resultsContainer.appendChild(div);
+            });
+        });
+});
+</script>
+

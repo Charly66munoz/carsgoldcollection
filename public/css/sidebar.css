@@ -1,0 +1,51 @@
+.menu-search {
+    display: flex;
+    width: auto;
+    margin: 0px;
+}
+
+.menu-search input {
+    height: 25px;
+}
+
+#search-results {
+    background: white;
+    position: absolute;
+    gap: 1px;
+    left: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    top: 50px;
+    z-index: 1000;
+    width: 250px;
+}
+
+#search-results div {
+    font-size: 12px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+#search-results div:hover {
+    background: #a0c8ceff;
+    cursor: pointer;
+}
+
+.shearcher {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 25px;
+    gap: none;
+}
+
+.shearcher button {
+    margin: 0px;
+    padding: 9px;
+
+}
+
+h3 {
+    color: white;
+    text-align: center;
+}

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Car;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,28 +17,40 @@ class CarRepository extends ServiceEntityRepository
         parent::__construct($registry, Car::class);
     }
 
-    //    /**
-    //     * @return Car[] Returns an array of Car objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function save(Car $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+        if ($flush){
+            $this->getEntityManager()->flush();
+        }
+    }
+    public function remove(Car $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+        
+        if ($flush){
+            $this->getEntityManager()->flush();
+        }
+    }
 
-    //    public function findOneBySomeField($value): ?Car
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function getAdminList(string $query): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->orderBy('c.year', 'DESC');
+
+        if (!empty($query)) {
+            $query = "%".strtolower($query)."%";
+
+            $qb
+                ->orWhere('LOWER(c.brand) LIKE :query')
+                ->orWhere('LOWER(c.model) LIKE :query')
+                ->setParameter('query', $query);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+
+
+    
 }

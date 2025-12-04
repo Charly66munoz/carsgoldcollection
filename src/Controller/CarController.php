@@ -18,9 +18,6 @@ use Symfony\Component\Uid\Uuid;
 
 final class CarController extends AbstractController
 {
-
-    
-
     #[Route('/', name: 'home')]
     public function index(): Response
     {
@@ -36,7 +33,7 @@ final class CarController extends AbstractController
     #[Route('/cars', name: 'cars')]
     public function indexs(CarRepository $carRepository): Response
     {
-        $cars = $carRepository->findAll(); // buscara todo los coches
+        $cars = $carRepository->findAll(); 
         $user = $this->getUser();
         $roles = $user ? $user->getRoles() : [];
         return $this->render('car/listCars.html.twig', [
@@ -49,8 +46,8 @@ final class CarController extends AbstractController
     #[Route('/cars/car/{id}', name: 'car_detail')]
     public function carDetail(Uuid $id, CarRepository $carRepository): Response
     {
-        $car = $carRepository->find($id); // buscara todo los coches
-        $cars = $carRepository->findAll(); // buscara todo los coches
+        $car = $carRepository->find($id); 
+        $cars = $carRepository->findAll(); 
         
         $user = $this->getUser();
         $roles = $user ? $user->getRoles() : [];
@@ -62,11 +59,11 @@ final class CarController extends AbstractController
     }
 
     #[Route('/cars/new', name: 'add_car')]
-    public function carAdd(CarRepository $carRepository, Request $request, EntityManagerInterface $em): Response
+    public function carAdd(CarRepository $carRepository, Request $request): Response
     {
         $car = new Car();
         $form = $this->createForm(CarForm::class, $car, ['validation_groups' => ['create'],]);
-        $cars = $carRepository->findAll(); // buscara todo los coches
+        $cars = $carRepository->findAll(); 
         $form->handleRequest($request);
 
         $photoFile = $form->get('photoFile')->getData();
@@ -84,8 +81,7 @@ final class CarController extends AbstractController
             $this->addFlash('error', 'No se pudo subir la imagen. Intenta de nuevo.');
             }
 
-            $em ->persist($car);
-            $em->flush();
+            $carRepository->save($car, true);
 
             return $this->redirectToRoute('cars',[], Response::HTTP_SEE_OTHER);
         }
@@ -97,7 +93,7 @@ final class CarController extends AbstractController
     }
 
     #[Route('cars/{id}/update', name: 'edit_car')]
-    public function carEdit(Request $request, EntityManagerInterface $em, Car $car): Response
+    public function carEdit(Request $request, CarRepository $carRepository, Car $car): Response
     {
         $oldPhoto= $car->getPhoto();
         $form = $this->createForm(CarForm::class, $car);
@@ -120,7 +116,7 @@ final class CarController extends AbstractController
             }else{
                 $car->setPhoto($oldPhoto);
             }
-            $em->flush();
+            $carRepository->save($car , true );
 
             return $this->redirectToRoute('car_detail',['id'=> $car->getId()], Response::HTTP_SEE_OTHER);
         }
@@ -130,35 +126,20 @@ final class CarController extends AbstractController
             'form' => $form,
         ]);
     }
-
     /**
      * @Method("DELETE")
     */
     #[Route('/cars/{id}/delete', name: 'delete_car', methods: ['POST'],)]
-    public function carDelete(Request $request, Car $car, EntityManagerInterface $em): Response
+    public function carDelete(Request $request, Car $car, CarRepository $carRepository): Response
     {
          $fileSystem = new Filesystem;
         if($this->isCsrfTokenValid('delete'.$car->getId(), $request->getPayload()->getString('_token'))){
             $fileSystem->remove($this->getParameter('photo_directory').'/'.$car->getPhoto());
-            $em->remove($car);
-            $em->flush();
+            $carRepository->remove($car, true);
         }
 
         return $this->redirectToRoute('cars',[],Response::HTTP_SEE_OTHER);
 
 
-    }
-
-    
-
-
-
-    //list ok
-    //C R U D
-    //Create ok..
-    //Read ok
-    //Update ..
-    //Delete ..
-
-   
+    } 
 }
