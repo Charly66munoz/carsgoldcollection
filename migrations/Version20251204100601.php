@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20251128114229 extends AbstractMigration
+final class Version20251204100601 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,8 +20,13 @@ final class Version20251128114229 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE car (id UUID NOT NULL, brand VARCHAR(255) NOT NULL, model VARCHAR(60) NOT NULL, description TEXT NOT NULL, photo VARCHAR(255) NOT NULL, price NUMERIC(10, 2) NOT NULL, year INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE car (id UUID NOT NULL, owner_id UUID NOT NULL, brand VARCHAR(255) NOT NULL, model VARCHAR(60) NOT NULL, description TEXT NOT NULL, photo VARCHAR(255) NOT NULL, price NUMERIC(10, 2) NOT NULL, year INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_773DE69D7E3C61F9 ON car (owner_id)');
         $this->addSql('COMMENT ON COLUMN car.id IS \'(DC2Type:uuid)\'');
+        $this->addSql('COMMENT ON COLUMN car.owner_id IS \'(DC2Type:uuid)\'');
+        $this->addSql('CREATE TABLE users (id UUID NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, nombre VARCHAR(255) NOT NULL, is_verified BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9E7927C74 ON users (email)');
+        $this->addSql('COMMENT ON COLUMN users.id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');
         $this->addSql('CREATE INDEX IDX_75EA56E0E3BD61CE ON messenger_messages (available_at)');
@@ -37,13 +42,16 @@ final class Version20251128114229 extends AbstractMigration
         $$ LANGUAGE plpgsql;');
         $this->addSql('DROP TRIGGER IF EXISTS notify_trigger ON messenger_messages;');
         $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
+        $this->addSql('ALTER TABLE car ADD CONSTRAINT FK_773DE69D7E3C61F9 FOREIGN KEY (owner_id) REFERENCES users (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
+        $this->addSql('ALTER TABLE car DROP CONSTRAINT FK_773DE69D7E3C61F9');
         $this->addSql('DROP TABLE car');
+        $this->addSql('DROP TABLE users');
         $this->addSql('DROP TABLE messenger_messages');
     }
 }

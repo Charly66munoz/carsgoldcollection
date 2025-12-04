@@ -3,6 +3,10 @@
 {% endblock %}
 
 <div class="lista">
+    <div id="logo">
+        <img src="{{ asset('img/logo/luxury_car.png') }}" width = 120>
+    </div>
+    <br>
     <form method="get" action="{{ path('cars') }}" class="menu-search">
         <div class="shearcher">
             <input type="text" id="search-input" placeholder="Buscar...">
@@ -13,13 +17,15 @@
             </button>
         </div>
     </form>
-    <h3>Luxury Collector</h3>
+    <br>
     <ul>
         <li><a href="{{ path('home') }}">Inicio</a></li>
         <hr>
         <li><a href="{{ path('cars') }}">Lista de autos</a></li>
         {% if app.user %}
             <li><a href="{{ path('add_car') }}">Añadir auto</a></li>
+            <hr>
+            <li><a href="{{ path('mis_autos') }}">Mis autos</a></li>
             <hr>
             <li><a href="{{ path('app_logout') }}">Logout</a></li>
         {% else %}

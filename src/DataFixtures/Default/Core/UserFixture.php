@@ -1,9 +1,6 @@
 <?php
 namespace App\DataFixtures\Default\Core;
 
-
-namespace App\DataFixtures\Default\Core;
-
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -19,21 +16,29 @@ class UserFixture extends Fixture implements FixtureGroupInterface
     public static function getGroups(): array
     {
         return [
-            'default',
+            'demo',
         ];
     }
-
+    
     public function load(ObjectManager $manager): void
     {
-        $user = new User();
-        $user->setNombre("Boo");
-        $user->setEmail('aa@luxury.com');
-        $passw = $this->passWordHaser->hashPassword($user, '123456');
-        $user->setPassword($passw);
-        $user->setRoles(['ROLE_USER']);
+        $usersData = [
+            ['nombre' => 'Boo', 'email' => 'bo@luxury.com'],
+            ['nombre' => 'Uuxe', 'email' => 'ux@luxury.com'],
+            ['nombre' => 'Bauti', 'email' => 'ba@luxury.com'],
+        ];
 
-        $manager->persist($user);
+        foreach ($usersData as $index => $data) {
+            $user = new User();
+            $user->setNombre($data['nombre']);
+            $user->setEmail($data['email']);
+            $user->setPassword($this->passWordHaser->hashPassword($user, '123456'));
+            $user->setRoles(['ROLE_USER']);
+
+            $manager->persist($user);
+            $this->addReference('user'.$index, $user);
+        }
+
         $manager->flush();
-
     }
 }

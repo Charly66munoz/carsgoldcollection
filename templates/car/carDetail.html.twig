@@ -66,7 +66,7 @@
     </div>
     <hr>
 
-    {% if role is not empty %}
+    {% if role is not empty and  verf %}
         <div id="buttons">
             <button><a href="{{ path('edit_car', { id: car.id() }) }}">Editar</a></button>
             {{ include('car/formDelate.html.twig') }}

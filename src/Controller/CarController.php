@@ -6,10 +6,9 @@ use App\Entity\Car;
 use App\Entity\User;
 use App\Form\Entity\CarForm;
 use App\Repository\CarRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,6 +41,21 @@ final class CarController extends AbstractController
             
         ]);
     }
+
+    #[Route('/miCars', name: 'mis_autos')]
+    public function miCars(CarRepository $carRepository){
+
+        $user = $this->getUser();
+        $roles = $user ? $user->getRoles() : [];
+
+        if ($user) {
+            $misCars = $carRepository->findBy(['owner' => $user]);
+            return $this->render('car/listCars.html.twig', [
+                'cars' => $misCars,
+                'role' => $roles,
+            ]);
+        }
+    }
     
     #[Route('/cars/car/{id}', name: 'car_detail')]
     public function carDetail(Uuid $id, CarRepository $carRepository): Response
@@ -50,11 +64,19 @@ final class CarController extends AbstractController
         $cars = $carRepository->findAll(); 
         
         $user = $this->getUser();
+        /** @var \App\Entity\Car $car */
+        $verf = false;
+        if ($user){
+            $verf = ($car->getOwner()  === $user ) ? true : false;
+        }
         $roles = $user ? $user->getRoles() : [];
+
+        
         return $this->render('car/carDetail.html.twig', [
             'role' => $roles,
             'car' => $car,
             'cars' => $cars,
+            'verf' => $verf,
         ]);
     }
 
@@ -65,11 +87,12 @@ final class CarController extends AbstractController
         $form = $this->createForm(CarForm::class, $car, ['validation_groups' => ['create'],]);
         $cars = $carRepository->findAll(); 
         $form->handleRequest($request);
+        $user = $this->getUser();
+
 
         $photoFile = $form->get('photoFile')->getData();
         if ($photoFile) {
         $newFileName = uniqid().'.'.$photoFile->guessExtension();
-        
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -80,6 +103,7 @@ final class CarController extends AbstractController
             } catch (FileException $e) {
             $this->addFlash('error', 'No se pudo subir la imagen. Intenta de nuevo.');
             }
+            $car->setOwner($user);
 
             $carRepository->save($car, true);
 
@@ -95,6 +119,13 @@ final class CarController extends AbstractController
     #[Route('cars/{id}/update', name: 'edit_car')]
     public function carEdit(Request $request, CarRepository $carRepository, Car $car): Response
     {
+        $user = $this->getUser();
+
+        // Comprobamos que solo el dueño pueda editar
+        if (!$user || $car->getOwner() !== $user) {
+            throw $this->createAccessDeniedException('No tienes permiso para editar este coche.');
+        }
+
         $oldPhoto= $car->getPhoto();
         $form = $this->createForm(CarForm::class, $car);
         $form->handleRequest($request);
@@ -106,40 +137,41 @@ final class CarController extends AbstractController
             if ($photoFile) {
                 $newFileName = uniqid().'.'.$photoFile->guessExtension();
                 try {
-                $photoFile->move($this->getParameter('photo_directory'), $newFileName);
-                
-                $fileSystem->remove($this->getParameter('photo_directory').'/'.$oldPhoto);
-                $car->setPhoto($newFileName);
+                    $photoFile->move($this->getParameter('photo_directory'), $newFileName);
+                    $fileSystem->remove($this->getParameter('photo_directory').'/'.$oldPhoto);
+                    $car->setPhoto($newFileName);
                 } catch (FileException $e) {
-                $this->addFlash('error', 'No se pudo subir la imagen. Intenta de nuevo.');
+                    $this->addFlash('error', 'No se pudo subir la imagen. Intenta de nuevo.');
                 }
-            }else{
+            } else {
                 $car->setPhoto($oldPhoto);
             }
             $carRepository->save($car , true );
 
             return $this->redirectToRoute('car_detail',['id'=> $car->getId()], Response::HTTP_SEE_OTHER);
         }
-        
+
         return $this->render('car/editCar.html.twig',[
             'car'=> $car,
             'form' => $form,
         ]);
     }
-    /**
-     * @Method("DELETE")
-    */
+    
     #[Route('/cars/{id}/delete', name: 'delete_car', methods: ['POST'],)]
     public function carDelete(Request $request, Car $car, CarRepository $carRepository): Response
     {
-         $fileSystem = new Filesystem;
-        if($this->isCsrfTokenValid('delete'.$car->getId(), $request->getPayload()->getString('_token'))){
+        $user = $this->getUser();
+
+        if (!$user || $car->getOwner() !== $user) {
+            throw $this->createAccessDeniedException('No tienes permiso para eliminar este coche.');
+        }
+
+        $fileSystem = new Filesystem;
+        if($this->isCsrfTokenValid('delete'.$car->getId(), $request->request->get('_token'))){
             $fileSystem->remove($this->getParameter('photo_directory').'/'.$car->getPhoto());
             $carRepository->remove($car, true);
         }
 
         return $this->redirectToRoute('cars',[],Response::HTTP_SEE_OTHER);
-
-
-    } 
+    }
 }

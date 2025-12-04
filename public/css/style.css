@@ -28,6 +28,18 @@ header {
 
 }
 
+#logo{
+    margin: 0px 20px 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#logo img{
+    border-radius: 50%;
+    display: block;
+
+}
+
 
 h4{ color: white;
     text-align: center;}
@@ -41,7 +53,7 @@ h4{ color: white;
 }
 
 aside {
-    background-color: #007180;
+    background-color: #053246;
     width: 250px;
     display: flex;
     flex-direction: column;
@@ -122,4 +134,25 @@ button:hover {
 .aloginRegister {
     text-decoration: none;
     color: rgb(0, 0, 0);
+}
+/*Para lista de autos*/
+
+.cars-list {
+    width: 80%;
+    margin-left: 40px;     /* separa del sidebar */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.cars-list ul {
+    width: 100%;
+    padding: 0;
+}
+
+.car-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px;
 }
