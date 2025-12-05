@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Car;
-use App\Entity\User;
 use App\Form\Entity\CarForm;
 use App\Repository\CarRepository;
-use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -20,13 +18,8 @@ final class CarController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(): Response
     {
-        $user = $this->getUser();
-        $roles = $user ? $user->getRoles() : [];
         
-        return $this->render('car/home.html.twig', [
-            'role' => $roles,
-
-        ]);
+        return $this->render('car/home.html.twig', []);
     }
 
     #[Route('/cars', name: 'cars')]

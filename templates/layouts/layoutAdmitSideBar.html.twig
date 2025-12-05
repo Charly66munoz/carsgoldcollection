@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    {% endblock %}
+
+    <div class="layout">
+        <aside>
+            {% include 'partials/sidebarAdmin.html.twig' %}
+        </aside>
+
+        <main>
+            {% block main %}{% endblock %}
+        </main>
+    </div>
+{% endblock %}

@@ -13,6 +13,8 @@ class SearchController extends AbstractController
     #[Route('/search/ajax', name: 'search_ajax')]
     public function searchAjax(Request $request, CarRepository $carRepository): JsonResponse
     {
+        //reques coentiene toda informacion de la peticion HTTP
+       
         $query = $request->query->get('q', '');
         $cars = $carRepository->getAdminList($query);
 

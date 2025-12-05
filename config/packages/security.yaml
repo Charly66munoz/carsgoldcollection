@@ -12,6 +12,9 @@ security:
                 property: email
         # used to reload user from session & other features (e.g. switch_user)
         
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+
     firewalls:
         dev:
             # 'assets/' is for AssetMapper, 'build/' for Webpack Encore.
@@ -40,9 +43,11 @@ security:
     # An easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        #Admin routes
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
         - { path: ^/$, roles: PUBLIC_ACCESS  }
         - { path: ^/cars$, roles: PUBLIC_ACCESS  }
         - { path: ^/cars/car, roles: PUBLIC_ACCESS  }
         - { path: ^/profile, roles: ROLE_USER }
-        
         - { path: ^/cars, roles: ROLE_USER }

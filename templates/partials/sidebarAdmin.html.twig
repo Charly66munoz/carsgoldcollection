@@ -19,23 +19,21 @@
     </form>
     <br>
     <ul>
-        <li><a href="{{ path('home') }}">Inicio</a></li>
-        <hr>
-        <li><a href="{{ path('cars') }}">Lista de autos</a></li>
+        
+        
+        
         {% if app.user %}
-            <li><a href="{{ path('add_car') }}">Añadir auto</a></li>
+            {% for %}
             <hr>
-            <li><a href="{{ path('mis_autos') }}">Mis autos</a></li>
-            <hr>
+            <li><a href="{{ path('home') }}">Volver al inicio</a></li>
+            {% endfor %}
             <li><a href="{{ path('app_logout') }}">Logout</a></li>
             {% if is_granted('ROLE_ADMIN') %}
             <hr>
-            <li><a href="{{ path('dashboard') }}">Panel Admin</a></li>
+            <li><a href="{{ path('home') }}">Volver al inicio</a></li>
         {% endif %}
-        {% else %}
-            <hr>
-            <li><a href="{{ path('app_login') }}">Login</a></li>
         {% endif %}
+        
     </ul>
 </div>
 <script>
@@ -55,6 +53,7 @@
             resultsContainer.innerHTML = '';
             data.forEach(car => {
                 const div = document.createElement('div');
+                //habra que poner datos de usuario
                 div.textContent = `${car.brand} ${car.model} (${car.year})`;
 
                 // Aquí ponemos el click dentro del forEach

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Car;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -31,6 +32,41 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+
+    public function save(User $entity, bool $flush = false): void 
+    {
+        $this->getEntityManager()->persist($entity);
+        if ($flush){
+            $this->getEntityManager()->flush();
+        }
+    }
+    
+    public function remove(User $entity, bool $flush = false): void 
+    {
+        $this->getEntityManager()->remove($entity);
+        if ($flush){
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function getAdminList(string $query): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->orderBy('c.roles', 'DESC');
+
+        if (!empty($query)) {
+            $query = "%".strtolower($query)."%";
+
+            $qb
+                ->orWhere('LOWER(c.email) LIKE :query')
+                ->orWhere('LOWER(c.roles) LIKE :query')
+                ->orWhere('LOWER(c.role) LIKE :query')
+                ->setParameter('query', $query);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     //    /**

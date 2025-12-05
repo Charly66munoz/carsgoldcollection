@@ -23,7 +23,7 @@ class UserFixture extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager): void
     {
         $usersData = [
-            ['nombre' => 'Boo', 'email' => 'bo@luxury.com'],
+            ['nombre' => 'Boo', 'email' => 'ag@luxury.com'],
             ['nombre' => 'Uuxe', 'email' => 'ux@luxury.com'],
             ['nombre' => 'Bauti', 'email' => 'ba@luxury.com'],
         ];

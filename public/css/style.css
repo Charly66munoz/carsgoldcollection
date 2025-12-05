@@ -23,9 +23,6 @@ header {
     text-align: center;
     background-color: rgba(245, 245, 245, 0.06);
     box-shadow: 0px 1px 10px black;
-    
-
-
 }
 
 #logo{
@@ -37,7 +34,7 @@ header {
 #logo img{
     border-radius: 50%;
     display: block;
-
+    width: 110px;
 }
 
 
