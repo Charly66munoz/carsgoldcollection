@@ -2,10 +2,17 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
+use App\Repository\CarRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Filesystem\Filesystem;
+
+
 
 class AdminController extends AbstractController
 {
@@ -16,16 +23,47 @@ class AdminController extends AbstractController
 
     }
 
-    #[Route('admin', 'user_list')]
+    #[Route('/admin/ulist', 'users')]
     public function userList(UserRepository $userRepository): Response
     {
+        $users = $userRepository->findAll();
 
+        return $this->render('user/userList.html.twig',[
+            'users' => $users,
+        ]);
+    }
+    
+    #[Route('/admin/{id}/', 'userDetail')]
+    public function userDetail(Uuid $id , UserRepository $userRepository): Response
+    {
+        $usern = $userRepository->find($id);
 
-
+        return $this->render('user/userDetail.html.twig',[
+            'user' => $usern,
+        ]);
     }
 
+    #[Route('/user/{id}/delete', name: 'delete_user', methods: ['POST'],)]
+    public function carDelete(Request $request, User $users, UserRepository $userRepository, CarRepository $carRepository): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('No tienes permiso para eliminar este coche.');
+        }
+        $fileSystem = new Filesystem;
+        
+        if($this->isCsrfTokenValid('delete'.$users->getId(), $request->request->get('_token'))){
+            $cars  = $carRepository->findAll($users);
+            foreach ($cars as $car){
+                $fileSystem-> remove($this->getParameter('photo_directory').'/'.$car->getPhoto());
+                $carRepository->remove($car, true);
+            }
 
 
+            $userRepository->remove($users, true);
+        }
 
-
+        return $this->redirectToRoute('users',[],Response::HTTP_SEE_OTHER);
+    }
 }

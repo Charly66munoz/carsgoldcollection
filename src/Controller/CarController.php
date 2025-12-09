@@ -54,7 +54,6 @@ final class CarController extends AbstractController
     public function carDetail(Uuid $id, CarRepository $carRepository): Response
     {
         $car = $carRepository->find($id); 
-        $cars = $carRepository->findAll(); 
         
         $user = $this->getUser();
         /** @var \App\Entity\Car $car */
@@ -68,7 +67,6 @@ final class CarController extends AbstractController
         return $this->render('car/carDetail.html.twig', [
             'role' => $roles,
             'car' => $car,
-            'cars' => $cars,
             'verf' => $verf,
         ]);
     }
@@ -155,7 +153,7 @@ final class CarController extends AbstractController
     {
         $user = $this->getUser();
 
-        if (!$user || $car->getOwner() !== $user) {
+        if (!$user || $car->getOwner() !== $user ) {
             throw $this->createAccessDeniedException('No tienes permiso para eliminar este coche.');
         }
 

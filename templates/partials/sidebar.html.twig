@@ -25,13 +25,13 @@
         {% if app.user %}
             <li><a href="{{ path('add_car') }}">Añadir auto</a></li>
             <hr>
+            {% if not is_granted('ROLE_ADMIN') %}
             <li><a href="{{ path('mis_autos') }}">Mis autos</a></li>
             <hr>
+            {% else %}
+                <li><a href="{{ path('dashboard') }}">Admin</a></li>
+            {% endif %}
             <li><a href="{{ path('app_logout') }}">Logout</a></li>
-            {% if is_granted('ROLE_ADMIN') %}
-            <hr>
-            <li><a href="{{ path('dashboard') }}">Panel Admin</a></li>
-        {% endif %}
         {% else %}
             <hr>
             <li><a href="{{ path('app_login') }}">Login</a></li>

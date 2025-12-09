@@ -19,24 +19,19 @@
     </form>
     <br>
     <ul>
-        
-        
-        
         {% if app.user %}
-            {% for %}
+
+            <li><a href="{{ path('users') }}">Lista de usuarios</a></li>
             <hr>
-            <li><a href="{{ path('home') }}">Volver al inicio</a></li>
-            {% endfor %}
             <li><a href="{{ path('app_logout') }}">Logout</a></li>
-            {% if is_granted('ROLE_ADMIN') %}
             <hr>
             <li><a href="{{ path('home') }}">Volver al inicio</a></li>
-        {% endif %}
+            
         {% endif %}
         
     </ul>
 </div>
-<script>
+{# <script>
     const input = document.getElementById('search-input');
     const resultsContainer = document.getElementById('search-results');
 
@@ -67,5 +62,5 @@
             });
         });
     });
-</script>
+</script> #}
 

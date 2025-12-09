@@ -134,7 +134,7 @@ button:hover {
 }
 /*Para lista de autos*/
 
-.cars-list {
+.general-list {
     width: 80%;
     margin-left: 40px;     /* separa del sidebar */
     display: flex;
@@ -142,12 +142,12 @@ button:hover {
     align-items: flex-start;
 }
 
-.cars-list ul {
+.general-list ul {
     width: 100%;
     padding: 0;
 }
 
-.car-item {
+.general-item {
     display: flex;
     align-items: center;
     justify-content: space-between;

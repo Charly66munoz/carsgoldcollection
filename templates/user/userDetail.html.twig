@@ -1,0 +1,45 @@
+{% extends 'layouts/layoutAdmitSideBar.html.twig' %}
+
+{% block title %}Detalles del Auto{% endblock %}
+
+{% block main %}
+    
+<style>     
+   
+    .infoDiv{
+        width: 30%;
+        padding: 0px;
+        display:flex;
+        flex-direction: column;
+        align-content:center;
+        align-items:flex-start;
+        font-size: 15px
+    }    
+    .infoDiv p{ 
+            font-size: 15px
+    }
+
+    form{
+        width:100%;
+        margin: none;
+    }
+    
+</style>
+
+    <div class="infoDiv">
+        <p><strong>Nombre: </strong> {{ user.nombre }}</p>
+                
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        
+    
+        <p><strong>Role:</strong>
+        {% for role in user.roles %}
+            <span class="badge">{{ role }}</span>
+        {% endfor %}
+        </p>
+        
+        {{ include('user/userDelete.html.twig') }}
+        
+    </div>
+{% endblock %}
+
