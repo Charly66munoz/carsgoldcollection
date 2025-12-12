@@ -1,6 +1,6 @@
 {% extends 'layouts/layoutAdmitSideBar.html.twig' %}
 
-{% block title %}Detalles del Auto{% endblock %}
+{% block title %}Detalles del usuarios{% endblock %}
 
 {% block main %}
     
@@ -12,7 +12,7 @@
         display:flex;
         flex-direction: column;
         align-content:center;
-        align-items:flex-start;
+        align-items:center;
         font-size: 15px
     }    
     .infoDiv p{ 
@@ -22,6 +22,23 @@
     form{
         width:100%;
         margin: none;
+    }
+
+    .but{
+        width: 30%;
+        background-color: white;
+        color: black
+    }
+
+    #listCars:hover {
+        background-color: pink;
+    }
+
+    #listCars{
+        width: 80%;
+        display:flex;
+        justify-content: center
+
     }
     
 </style>
@@ -34,12 +51,38 @@
     
         <p><strong>Role:</strong>
         {% for role in user.roles %}
-            <span class="badge">{{ role }}</span>
+            <span >{{ role }}</span>
         {% endfor %}
         </p>
+        <div id="listCars" >
+            <p><strong>Coches: </strong></p>
+            <button class='openCars but'> {{ ncars }}</button>
+        </div>
         
         {{ include('user/userDelete.html.twig') }}
         
     </div>
+<script>
+    let listCars = document.querySelector('#listCars');
+    let openCars = document.querySelector('.openCars');
+
+
+    openCars.addEventListener('click', ()=>{
+        let cars = {{ cars|json_encode|raw }};
+        let values = openCars;
+        let iterr = values.textContent;
+        openCars.classList.remove('openCars');
+        openCars.classList.add('closeCars')
+        openCars.textContent = "Cerrar ";
+
+        cars.forEach(car => {
+        console.log(car);
+        });
+        
+    });
+
+
+</script>
 {% endblock %}
+
 

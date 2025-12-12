@@ -34,12 +34,26 @@ class AdminController extends AbstractController
     }
     
     #[Route('/admin/{id}/', 'userDetail')]
-    public function userDetail(Uuid $id , UserRepository $userRepository): Response
+    public function userDetail(Uuid $id , UserRepository $userRepository, CarRepository $carRepository): Response
     {
         $usern = $userRepository->find($id);
 
+        $cars = $carRepository->findBy(
+                ['owner' => $id]
+            );
+        $ncars = count($cars);
+
+        $carsArray = array_map(fn($car) => [
+        'id' => $car->getId(),
+        'marca' => $car->getBrand(),
+        'modelo' => $car->getModel(),
+        'imagen' => $car->getPhoto(),
+        ], $cars);
+
         return $this->render('user/userDetail.html.twig',[
             'user' => $usern,
+            'cars' => $carsArray,
+            'ncars' => $ncars,
         ]);
     }
 
@@ -54,7 +68,12 @@ class AdminController extends AbstractController
         $fileSystem = new Filesystem;
         
         if($this->isCsrfTokenValid('delete'.$users->getId(), $request->request->get('_token'))){
-            $cars  = $carRepository->findAll($users);
+            
+            
+            $cars = $carRepository->findBy(
+                ['owner' => $users->getId()]
+            );
+            
             foreach ($cars as $car){
                 $fileSystem-> remove($this->getParameter('photo_directory').'/'.$car->getPhoto());
                 $carRepository->remove($car, true);
