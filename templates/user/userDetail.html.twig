@@ -30,15 +30,27 @@
         color: black
     }
 
-    #listCars:hover {
-        background-color: pink;
-    }
+    
 
     #listCars{
-        width: 80%;
-        display:flex;
-        justify-content: center
-
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        justify-self: center;
+        text-align:center;
+    }
+    #listCars button{
+         grid-column: span 6;
+        
+    }
+    #listCars p{
+         grid-column: span 6;
+         
+        
+    }
+    
+    #listCars ol{
+         grid-column: span 12;   
     }
     
 </style>
@@ -56,7 +68,7 @@
         </p>
         <div id="listCars" >
             <p><strong>Coches: </strong></p>
-            <button class='openCars but'> {{ ncars }}</button>
+            <button id="butnosi" class='openCars but'> {{ ncars }}</button>
         </div>
         
         {{ include('user/userDelete.html.twig') }}
@@ -64,23 +76,37 @@
     </div>
 <script>
     let listCars = document.querySelector('#listCars');
+    let generalButton = document.querySelector('#butnosi');
     let openCars = document.querySelector('.openCars');
+    let values = openCars.textContent;
+    
 
 
-    openCars.addEventListener('click', ()=>{
-        let cars = {{ cars|json_encode|raw }};
-        let values = openCars;
-        let iterr = values.textContent;
-        openCars.classList.remove('openCars');
-        openCars.classList.add('closeCars')
-        openCars.textContent = "Cerrar ";
+   openCars.addEventListener('click', () => {
+        let existingList = listCars.querySelector('ol');
+        let cars = ({{ cars|json_encode|raw }} !== null) ? {{ cars|json_encode|raw }} : [];
 
-        cars.forEach(car => {
-        console.log(car);
-        });
-        
+        if (existingList) {
+            // Cerrar lista
+            existingList.remove();
+            openCars.classList.remove('closeCars');
+            openCars.classList.add('openCars');
+            openCars.textContent = values; // texto original
+        } else {
+            // Abrir lista
+            openCars.classList.remove('openCars');
+            openCars.classList.add('closeCars');
+            openCars.textContent = "Cerrar ";
+
+            let listOwnCars = document.createElement('ol');
+            cars.forEach(car => {
+                let list = document.createElement('li');
+                list.textContent = `Modelo: ${car['model']} brand ${car['brand']} año: ${car['year']}`;
+                listOwnCars.append(list);
+            });
+            listCars.append(listOwnCars);
+        }
     });
-
 
 </script>
 {% endblock %}

@@ -45,8 +45,9 @@ class AdminController extends AbstractController
 
         $carsArray = array_map(fn($car) => [
         'id' => $car->getId(),
-        'marca' => $car->getBrand(),
-        'modelo' => $car->getModel(),
+        'brand' => $car->getBrand(),
+        'model' => $car->getModel(),
+        'year' => $car->getYear(),
         'imagen' => $car->getPhoto(),
         ], $cars);
 
